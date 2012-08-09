@@ -9,7 +9,7 @@
  * Licensed under the MIT license
  *
  */
-(function(exports) {
+;(function(exports) {
 
   'use strict';
 
