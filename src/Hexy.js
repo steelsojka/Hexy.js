@@ -226,10 +226,11 @@
         return _outputString(value, type);
       }
     },
-    transfer : function() {
+    transfer : function(object) {
+      var _object = object || exports;
       for (var key in this) {
         if (this.hasOwnProperty(key)) {
-          exports[key] = this[key];
+          _object[key] = this[key];
         }
       }
     }

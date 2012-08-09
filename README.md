@@ -88,8 +88,9 @@ Hexy.sliceRGB("(255, 0, 132)") // ["255", "0", "132"]
 // Converts a HEX value to an integer
 Hexy.toInt("FF") // 255
 
-// Transfers all Hexy methods to the context object (window if in browser)
-Hexy.transfer();
+// Transfers all Hexy methods to the passed in object or the exports object
+Hexy.transfer(myObject);
+myObject.getRandomHex();
 ```
 
 License
