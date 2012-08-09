@@ -1,5 +1,5 @@
 /**
- * Hexy.js v@VERSION@
+ * Hexy.js v0.2.0
  * By Steven Sojka
  *
  * https://github.com/steelsojka/Hexy.js
@@ -226,7 +226,7 @@
         return _outputString(value, type);
       }
     },
-    export : function() {
+    transfer : function() {
       for (var key in this) {
         if (this.hasOwnProperty(key)) {
           exports[key] = this[key];

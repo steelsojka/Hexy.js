@@ -85,8 +85,8 @@ Hexy.sliceHex("#FF00FF") // ["FF", "00", "FF"]
 // Slices an RGB value into an array
 Hexy.sliceRGB("(255, 0, 132)") // ["255", "0", "132"]
 
-// Exports all Hexy methods to the context object (window if in browser)
-Hexy.export();
+// Transfers all Hexy methods to the context object (window if in browser)
+Hexy.transfer();
 ```
 
 License
