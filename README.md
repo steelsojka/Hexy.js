@@ -85,6 +85,9 @@ Hexy.sliceHex("#FF00FF") // ["FF", "00", "FF"]
 // Slices an RGB value into an array
 Hexy.sliceRGB("(255, 0, 132)") // ["255", "0", "132"]
 
+// Converts a HEX value to an integer
+Hexy.toInt("FF") // 255
+
 // Transfers all Hexy methods to the context object (window if in browser)
 Hexy.transfer();
 ```
