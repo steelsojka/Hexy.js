@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<project name="Hexy.js" default="build.dev">
+	
+	<loadproperties srcfile="build.properties" />
+
+	<target name="clean">
+		<delete file="${src.dir}/Hexy.min.js"/>
+	</target>
+
+	<target name="minify">
+		<apply executable="java" failonerror="false">
+			<fileset dir="${src.dir}" includes="Hexy.js"/>
+			<mapper type="glob" from="*.js" to="${src.dir}/*.min.js"/>
+			<arg line="-jar"/>
+			<arg path="${closure}"/>
+			<arg line="${closure.options}"/>
+			<arg line="--js"/>
+			<srcfile/>
+			<arg line="--js_output_file"/>
+			<targetfile/>
+		</apply>
+	</target>
+
+	<target name="build.dev" depends="clean,minify">
+		
+	</target>
+
+</project>
