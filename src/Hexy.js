@@ -2,6 +2,8 @@
  * Hexy.js v0.1.0
  * By Steven Sojka
  *
+ * https://github.com/steelsojka/Hexy.js
+ * 
  * Allows manipulation of RGB values and hex values.
  * 
  */
@@ -117,7 +119,7 @@
      * @param  {Integer} [end]   Ending range
      * @return {Array|String|Object}  Returns the hex in whatever the output format is set to
      */
-    getRandomHex : function[type](start, end) {
+    getRandomHex : function(start, end) {
       var hex = [], i = 3, color;
       start = start || 0;
       end   = end || 255;
@@ -142,8 +144,11 @@
      * @param  {String|Array} hex Hex string or array of hex strings
      * @return {String|Array|Object} RGB values in output format
      */
-    toRGB : function(hex) {
+    toRGB : function(hex, output) {
       var data;
+      if (output) { 
+        this.setOutput(output);
+      }
       if (_isArray(hex)) {
         data = [];
         for (var i = hex.length - 1; i >= 0; i--) {
@@ -178,7 +183,10 @@
      * @return {String|Array|Object} Returns hex values in output format
      */
     toHex : function(rgb) {
-       var data;
+      var data;
+      if (output) { 
+        this.setOutput(output);
+      }
       if (_isArray(rgb)) {
         data = [];
         for (var i = rgb.length - 1; i >= 0; i--) {
