@@ -1,11 +1,13 @@
 /**
- * Hexy.js v0.1.0
+ * Hexy.js v@VERSION@
  * By Steven Sojka
  *
  * https://github.com/steelsojka/Hexy.js
- * 
- * Allows manipulation of RGB values and hex values.
- * 
+ *
+ * Allows manipulation of RGB values and HEX values.
+ *
+ * Licensed under the MIT license
+ *
  */
 (function(exports) {
 
@@ -20,6 +22,13 @@
     return Object.prototype.toString.apply(a) === '[object Array]';
   };
 
+  var _toArray = function(a) {
+    var temp = [];
+    for (var k in a)
+      temp.push(a[k]);
+    return temp;
+  }
+
   var _toInt = function(a) {
     return parseInt(a, 16);
   };
@@ -30,18 +39,23 @@
   };
 
   var _sliceHex = function(hex) {
-    if (typeof hex !== "string") return;
-    hex = hex.replace("#", "");
-    return hex.match(/.{2}/g);
-  };
-
-  var _isRGB = function(string) {
-    return string.match(/\,/g) !== null;
+    var data;
+    if (_isArray(hex)) return hex;
+    switch(typeof hex) {
+      case "string":
+        hex = hex.replace("#", "");
+        return hex.match(/.{2}/g);
+      case "object": return _toArray(hex);
+    }
   };
 
   var _sliceRGB = function(rgb) {
-    if (typeof rgb !== "string") return;
-    return rgb.match(/\d+/g);
+    var data
+    if (_isArray(rgb)) return rgb;
+    switch(typeof rgb) {
+      case "string": return rgb.match(/\d+/g);
+      case "object": return _toArray(rgb);
+    }
   };
 
   var _outputObject = function(value, type) {
@@ -52,12 +66,12 @@
         G : value[1],
         B : value[2]
       }
-    } 
+    }
     return out;
   };
 
   var _outputArray = function(value) {
-    if (_isArray(value)) { 
+    if (_isArray(value)) {
       return value;
     }
   };
@@ -72,9 +86,6 @@
 
   var _toRGB = function(hex) {
     var array = _sliceHex(hex);
-    if (array.length !== 3) {
-      throw new Error("When converting from hex to RGB, a six digit hexidecimal is required");
-    }
     for (var i = array.length - 1; i >= 0; i--) {
       array[i] = _toInt(array[i]);
     };
@@ -83,10 +94,7 @@
 
   var _toHex = function(rgb) {
     var array = _sliceRGB(rgb);
-    if (array.length !== 3) {
-      throw new Error("When converting from RGB to hex, a decimal for Red, Green, and Blue are required.");
-    }
-     for (var i = array.length - 1; i >= 0; i--) {
+    for (var i = array.length - 1; i >= 0; i--) {
       array[i] = _toHexidecimal(parseInt(array[i]));
     };
     return array;
@@ -124,7 +132,7 @@
       start = start || 0;
       end   = end || 255;
       while(i--) {
-        color = Math.floor((Math.random() * end) + start).toString(16);
+        color = Math.floor(start + (Math.random() * (end - start))).toString(16);
         color = (color.length === 1) ? "0" + color : color;
         hex.push(color);
       }
@@ -144,16 +152,17 @@
      * @param  {String|Array} hex Hex string or array of hex strings
      * @return {String|Array|Object} RGB values in output format
      */
-    toRGB : function(hex, output) {
+    toRGB : function(hex, multiple, output) {
       var data;
-      if (output) { 
+      if (output) {
         this.setOutput(output);
       }
-      if (_isArray(hex)) {
+      if (multiple) {
         data = [];
         for (var i = hex.length - 1; i >= 0; i--) {
-          data.push(this.format(_toRGB(hex[i]), "RGB")); 
+          data.push(this.format(_toRGB(hex[i]), "RGB"));
         }
+        data = data.reverse();
       } else {
         data = this.format(_toRGB(hex), "RGB");
       }
@@ -182,16 +191,17 @@
      * @param  {String|Array} rgb RGB string or array of RGB strings
      * @return {String|Array|Object} Returns hex values in output format
      */
-    toHex : function(rgb) {
+    toHex : function(rgb, multiple, output) {
       var data;
-      if (output) { 
+      if (output) {
         this.setOutput(output);
       }
-      if (_isArray(rgb)) {
+      if (multiple) {
         data = [];
         for (var i = rgb.length - 1; i >= 0; i--) {
-          data.push(this.format(_toHex(rgb[i]), "HEX")); 
+          data.push(this.format(_toHex(rgb[i]), "HEX"));
         }
+        data = data.reverse();
       } else {
         data = this.format(_toHex(rgb), "HEX");
       }
@@ -205,12 +215,22 @@
      */
     format : function(value, type) {
       var method = this.getOutput();
+      if (typeof value === "object") {
+        value = _toArray(value);
+      }
       if (method === "object") {
         return _outputObject(value);
       } else if (method === "array") {
         return _outputArray(value);
       } else {
         return _outputString(value, type);
+      }
+    },
+    export : function() {
+      for (var key in this) {
+        if (this.hasOwnProperty(key)) {
+          exports[key] = this[key];
+        }
       }
     }
   };

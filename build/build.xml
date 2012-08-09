@@ -1,16 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <project name="Hexy.js" default="build.dev">
-	
+
 	<loadproperties srcfile="build.properties" />
+
+	<tstamp>
+		<format property="build.time" pattern="MMMM d, yyyy hh:mm:ss" locale="en,US" />
+	</tstamp>
 
 	<target name="clean">
 		<delete file="${src.dir}/Hexy.min.js"/>
 	</target>
 
+	<target name="stamp">
+		<concat destfile="${src.dir}/Hexy.min.js" fixlastline="yes" eol="lf">
+			<header trimleading="yes">
+/**
+ * Hexy.js v${version}
+ * By Steven Sojka
+ *
+ * https://github.com/steelsojka/Hexy.js
+ *
+ * Allows manipulation of RGB values and HEX values.
+ *
+ * Licensed under the MIT license
+ *
+ * Build time : ${build.time}
+ */
+			</header>
+			<fileset dir="${build.dir}" includes="temp.js"/>
+		</concat>
+	</target>
+
 	<target name="minify">
 		<apply executable="java" failonerror="false">
 			<fileset dir="${src.dir}" includes="Hexy.js"/>
-			<mapper type="glob" from="*.js" to="${src.dir}/*.min.js"/>
+			<mapper type="glob" from="*.js" to="temp.js"/>
 			<arg line="-jar"/>
 			<arg path="${closure}"/>
 			<arg line="${closure.options}"/>
@@ -21,8 +45,18 @@
 		</apply>
 	</target>
 
-	<target name="build.dev" depends="clean,minify">
-		
+	<target name="post-clean">
+		<delete file="${build.dir}/temp.js" />
+	</target>
+
+	<target name="bake">
+		<replaceregexp match="@VERSION@" replace="${version}" flags="g" byline="true">
+			<fileset dir="${src.dir}" includes="**/*" />
+		</replaceregexp>
+	</target>
+
+	<target name="build.dev" depends="clean, minify, stamp, bake, post-clean">
+
 	</target>
 
 </project>
