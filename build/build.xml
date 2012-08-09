@@ -19,11 +19,8 @@
  * By Steven Sojka
  *
  * https://github.com/steelsojka/Hexy.js
- *
  * Allows manipulation of RGB values and HEX values.
- *
  * Licensed under the MIT license
- *
  * Build time : ${build.time}
  */
 			</header>
