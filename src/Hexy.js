@@ -1,5 +1,5 @@
 /**
- * Hexy.js v0.2.0
+ * Hexy.js
  * By Steven Sojka
  *
  * https://github.com/steelsojka/Hexy.js
@@ -61,11 +61,7 @@
   var _outputObject = function(value, type) {
     var out;
     if (_isArray(value)) {
-      out = {
-        R : value[0],
-        G : value[1],
-        B : value[2]
-      }
+      out = {R : value[0], G : value[1], B : value[2]};
     }
     return out;
   };
@@ -77,9 +73,9 @@
   };
 
   var _outputString = function(value, type) {
-    if (type === "HEX") {
+    if (type === this.Types.HEX) {
       return "#" + value.join("");
-    } else if (type === "RGB") {
+    } else if (type === this.Types.RGB) {
       return "(" + value.join(",") + ")";
     }
   };
@@ -107,8 +103,15 @@
    */
   var Hexy = {
     /**
-     * Sets the ouput mode
-     * @memberOf Hexy
+     * Constants used for outputs
+     * @type {Object}
+     */
+    Types : {
+      HEX : "HEX",
+      RGB : "RGB"
+    },
+    /**
+     * Sets the output mode
      * @param {String} output Set to "string", "object", or "array"
      */
     setOutput : function(output) {
@@ -136,7 +139,7 @@
         color = (color.length === 1) ? "0" + color : color;
         hex.push(color);
       }
-      return this.format(hex, "HEX");
+      return this.format(hex, this.Types.HEX);
     },
     /**
      * Gets a random RGB color
@@ -160,11 +163,11 @@
       if (multiple) {
         data = [];
         for (var i = hex.length - 1; i >= 0; i--) {
-          data.push(this.format(_toRGB(hex[i]), "RGB"));
+          data.push(this.format(_toRGB(hex[i]), this.Types.RGB));
         }
         data = data.reverse();
       } else {
-        data = this.format(_toRGB(hex), "RGB");
+        data = this.format(_toRGB(hex), this.Types.RGB);
       }
       return data;
     },
@@ -199,11 +202,11 @@
       if (multiple) {
         data = [];
         for (var i = rgb.length - 1; i >= 0; i--) {
-          data.push(this.format(_toHex(rgb[i]), "HEX"));
+          data.push(this.format(_toHex(rgb[i]), this.Types.HEX));
         }
         data = data.reverse();
       } else {
-        data = this.format(_toHex(rgb), "HEX");
+        data = this.format(_toHex(rgb), this.Types.HEX);
       }
       return data;
     },
@@ -219,11 +222,11 @@
         value = _toArray(value);
       }
       if (method === "object") {
-        return _outputObject(value);
+        return _outputObject.call(this, value);
       } else if (method === "array") {
-        return _outputArray(value);
+        return _outputArray.call(this, value);
       } else {
-        return _outputString(value, type);
+        return _outputString.call(this, value, type);
       }
     },
     transfer : function(object) {

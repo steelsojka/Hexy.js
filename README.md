@@ -37,7 +37,7 @@ Hexy.toHex({
 Multiples
 ---------
 
-You can convert an array of multiple values by checking the multiple flag to true.
+You can convert an array of multiple values by passing true as the second parameter
 
 ```javascript
 // Convert multiple hex values
@@ -90,10 +90,10 @@ Hexy.toInt("FF") // 255
 
 // Transfers all Hexy methods to the passed in object or the exports object
 Hexy.transfer(myObject);
-myObject.getRandomHex();
+myObject.getRandomHex(); // "#8b1205"
 ```
 
 License
 =======
 
-Licensed under the MIT licenses
+Licensed under the MIT license
